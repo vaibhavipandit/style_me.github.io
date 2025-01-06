@@ -18,20 +18,27 @@
             <input type="text" id="zipCode" name="zipCode" required>
             <br><br>
 
-            <label for="bodyShape">Select your body shape:</label>
-            <select id="bodyShape" name="bodyShape">
-                <option value="pear">Pear</option>
-                <option value="apple">Apple</option>
-                <option value="rectangle">Rectangle</option>
-                <option value="hourglass">Hourglass</option>
+            <label for="occasion">Select your occasion:</label>
+            <select id="occasion" name="occasion">
+                <option value="formal">Formal</option>
+                <option value="casual">Casual</option>
             </select>
             <br><br>
 
-            <label for="skinColor">Select your skin color:</label>
-            <select id="skinColor" name="skinColor">
-                <option value="light">Light</option>
-                <option value="medium">Medium</option>
-                <option value="dark">Dark</option>
+            <label for="skinTone">Select your skin tone:</label>
+            <select id="skinTone" name="skinTone">
+                <option value="light">Fair Light - Fair</option>
+                <option value="medium">Medium Light - Medium</option>
+                <option value="dark">Medium Dark - Dark</option>
+            </select>
+            <br><br>
+			
+			<label for="season">Select season:</label>
+            <select id="season" name="season">
+                <option value="summer">Summer</option>
+                <option value="fall">Fall</option>
+				<option value="winter">Winter</option>
+                <option value="spring">Spring</option>
             </select>
             <br><br>
 
@@ -45,37 +52,75 @@
 
     <script>
         function fetchWeather() {
-            var zipCode = document.getElementById('zipCode').value;
-            var apiKey = 'YOUR_OPENWEATHERMAP_API_KEY'; // Replace with your actual API key
-            var url = `https://api.openweathermap.org/data/2.5/weather?zip=${zipCode},us&appid=${apiKey}&units=metric`;
+            const zipCode = document.getElementById('zipCode').value;
+            const apiKey = '426951d21ec4e1baef5bf01a52428423';
+            const url = `https://api.openweathermap.org/data/2.5/weather?zip=${zipCode},us&appid=${apiKey}&units=metric`;
+
+            console.log(`Fetching weather for zip code: ${zipCode}`); // Debugging log
 
             fetch(url)
-            .then(response => response.json())
-            .then(data => {
-                var temperature = data.main.temp;
-                suggestOutfit(temperature);
-            })
-            .catch(error => {
-                console.error('Error fetching weather data:', error);
-                document.getElementById('result').innerHTML = 'Failed to retrieve weather data.';
-            });
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    console.log('Weather data:', data); // Debugging log
+                    const temperature = data.main.temp;
+                    suggestOutfit(temperature);
+                })
+                .catch(error => {
+                    console.error('Error fetching weather data:', error);
+                    document.getElementById('result').innerHTML = `<p>Failed to retrieve weather data. Please check your input.</p>`;
+                });
         }
 
         function suggestOutfit(temperature) {
-            var bodyShape = document.getElementById('bodyShape').value;
-            var skinColor = document.getElementById('skinColor').value;
-            var outfit = '';
+            const occasion = document.getElementById('occasion').value;
+            const season = document.getElementById('season').value;
+            const skinTone = document.getElementById('skinTone').value;
+            let outfit = '';
+            let imagePaths = [];
 
-            // Simplified logic to suggest outfit based on temperature
-            if (temperature < 10) {
-                outfit = 'Wear a warm coat, scarf, and gloves.';
-            } else if (temperature >= 10 && temperature < 20) {
-                outfit = 'A light jacket and long pants would be suitable.';
+            if (skinTone === "light" && season === "winter" && occasion === "formal" && temperature <= 0) {
+                <!-- outfit = 'Wear a warm coat, scarf, and gloves.'; -->
+                imagePaths = [
+                    './assets/winter_formal_outfits/winter_outfit_1.png',
+                    './assets/winter_formal_outfits/winter_outfit_2.png',
+                    './assets/winter_formal_outfits/winter_outfit_3.png',
+                    './assets/winter_formal_outfits/winter_outfit_4.png',
+                    './assets/winter_formal_outfits/winter_outfit_5.png'
+                ];
+            } else if (skinTone === "light" && season === "winter" && occasion === "formal" && temperature > 0 && temperature <= 10) {
+                <!-- outfit = 'A light jacket and long pants would be suitable.'; -->
+                 imagePaths = [
+                    './assets/winter_formal_outfits/winter_outfit_6.png',
+                    './assets/winter_formal_outfits/winter_outfit_7.png',
+                    './assets/winter_formal_outfits/winter_outfit_8.png',
+                    './assets/winter_formal_outfits/winter_outfit_9.png',
+                    './assets/winter_formal_outfits/winter_outfit_10.png'
+                ];
             } else {
                 outfit = 'Wear shorts and a t-shirt.';
+                imagePaths = [
+                    './assets/summer-casual1.jpg',
+                    './assets/summer-casual2.jpg',
+                    './assets/summer-casual3.jpg',
+                    './assets/summer-casual4.jpg',
+                    './assets/summer-casual5.jpg'
+                ];
             }
 
-            document.getElementById('result').innerHTML = `Based on the temperature of ${temperature}°C and your selections, ${outfit}`;
+            // Generate HTML for the images
+            const imagesHTML = imagePaths
+                .map(path => `<img src="${path}" alt="Outfit suggestion" style="max-width: 100px; height: auto; margin: 5px;">`)
+                .join('');
+
+            document.getElementById('result').innerHTML = `
+                <p>Based on the temperature of ${temperature}°C and your selections, ${outfit}</p>
+                <div style="display: flex; flex-wrap: wrap;">${imagesHTML}</div>
+            `;
         }
     </script>
 </body>
