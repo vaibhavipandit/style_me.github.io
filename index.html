@@ -1,127 +1,375 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Outfit Suggestion App</title>
-    <style>
-        body { font-family: Arial, sans-serif; }
-        .container { max-width: 600px; margin: auto; padding: 20px; }
-        .result { margin-top: 20px; }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <h1>Outfit Suggestion Based on Weather</h1>
-        <form id="outfitForm">
-            <label for="zipCode">Enter your zip code:</label>
-            <input type="text" id="zipCode" name="zipCode" required>
-            <br><br>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Stylemate</title>
+  <style>
+  
+  @media (max-width: 600px) {
+	  .container {
+		width: 90%; 
+		padding: 1rem; 
+	  }
 
-            <label for="occasion">Select your occasion:</label>
-            <select id="occasion" name="occasion">
-                <option value="formal">Formal</option>
-                <option value="casual">Casual</option>
-            </select>
-            <br><br>
+	  .input, .select, .button {
+		width: 100%; 
+	  }
+	}
 
-            <label for="skinTone">Select your skin tone:</label>
-            <select id="skinTone" name="skinTone">
-                <option value="light">Fair Light - Fair</option>
-                <option value="medium">Medium Light - Medium</option>
-                <option value="dark">Medium Dark - Dark</option>
-            </select>
-            <br><br>
-			
-			<label for="season">Select season:</label>
-            <select id="season" name="season">
-                <option value="summer">Summer</option>
-                <option value="fall">Fall</option>
-				<option value="winter">Winter</option>
-                <option value="spring">Spring</option>
-            </select>
-            <br><br>
+   body {
+	  font-family: Arial, sans-serif;
+	  margin: 0;
+	  padding: 0;
+	  background: linear-gradient(135deg, #F0E0FF 0%, #F3E8FF 100%);
+	  display: flex;
+	  justify-content: center;
+	  align-items: center;
+	  min-height: 100vh;
+	}
 
-            <button type="button" onclick="fetchWeather()">Get Outfit Suggestion</button>
-        </form>
-        
-        <div class="result" id="result">
-            <!-- Results will be displayed here -->
-        </div>
-    </div>
+    .container {
+      background-color: white;
+      padding: 2rem;
+      border-radius: 1rem;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      width: 400px;
+    }
 
-    <script>
-        function fetchWeather() {
-            const zipCode = document.getElementById('zipCode').value;
-            const apiKey = '426951d21ec4e1baef5bf01a52428423';
-            const url = `https://api.openweathermap.org/data/2.5/weather?zip=${zipCode},us&appid=${apiKey}&units=metric`;
+    .select {
+      width: 100%;
+      padding: 0.5rem;
+      border: 1px solid #ccc;
+      border-radius: 0.5rem;
+      margin-bottom: 1rem;
+	  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); 
+    }
+	
+	.input {
+      width: 95.5%;
+      padding: 0.5rem;
+      border: 1px solid #ccc;
+      border-radius: 0.5rem;
+      margin-bottom: 1rem;
+	  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); 
+    }
+	
+	.header-one {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		text-align: center; 
+		font-size: 1.875rem; 
+		font-weight: bold; 
+		color: #2d3748;
+	}
+	
+	.header-two {
+		display: flex;
+		justify-content: center;
+		color: #6b7280; 
+	}
 
-            console.log(`Fetching weather for zip code: ${zipCode}`); // Debugging log
+    .button {
+      background-color: #833AD9;
+      color: white;
+      padding: 0.5rem 1rem;
+      border: none;
+      border-radius: 0.5rem;
+      cursor: pointer;
+      width: 100%;
+    }
 
-            fetch(url)
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error(`HTTP error! status: ${response.status}`);
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    console.log('Weather data:', data); // Debugging log
-                    const temperature = data.main.temp;
-                    suggestOutfit(temperature);
-                })
-                .catch(error => {
-                    console.error('Error fetching weather data:', error);
-                    document.getElementById('result').innerHTML = `<p>Failed to retrieve weather data. Please check your input.</p>`;
-                });
+    .button:hover {
+      background-color: #6b28e0;
+    }
+
+    .outfit-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        width: 1000px;
+        height: 600px;
+        background-color: white;
+        border-radius: 1rem;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        margin: 2rem 0;
+        padding: 2rem 0;
+    }
+	
+	.component {
+		margin-top: 20px; 
+	}
+	
+	.component1 {
+	  margin-top: 0; 
+	  padding-top: 0; 
+    }
+    .image-container {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1rem;
+        width: 100%;
+        height: 100%;
+        background-color: white;
+        border-radius: 1rem;
+    }
+
+    .image-card {
+        position: relative;
+        width: 100%;
+        padding-top: 100%; 
+      }
+
+    .image-card img {
+        position: absolute;
+        top: 0;
+        left: 1rem;
+        right: 1rem;
+        width: 90%;
+        height: 100%;
+        border-radius: 1rem;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease-in-out, filter 0.3s ease-in-out;
+    }
+
+        .image-card:hover img {
+            transform: scale(1.2);
+            z-index: 10;
         }
 
-        function suggestOutfit(temperature) {
+        .image-card:not(:hover) img {
+            filter: none;
+        }
+
+        .image-card:hover ~ .image-card img {
+            filter: blur(2px);
+        }
+
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1 class="header-one">Stylemate</h1>
+    <p class="header-two component1">Your Artistic Outfit Companion</p>
+
+    <input type="text" class="input component" placeholder="Enter your zip code" id="zipCode">
+
+    <select class="select" id="skinTone">
+      <option value="light">Fair Light - Light</option>
+      <option value="medium">Medium Light - Medium</option>
+      <option value="dark">Medium Dark - Dark</option>
+    </select>
+
+    <select class="select" id="occasion">
+      <option value="casual">Casual</option>
+      <option value="formal">Formal</option>
+    </select>
+
+    <button class="button" onclick="generateOutfit()">Generate Outfit</button>
+
+    
+  </div>
+
+  <div class="outfit-container" id="resultContainer" style="display: none;"></div>
+
+  <script>
+    function generateOutfit() {
+      const container = document.querySelector('.container');
+      container.style.display = 'none';
+
+      const resultContainer = document.getElementById('resultContainer');
+      resultContainer.style.display = 'block';
+
+      const zipCode = document.getElementById('zipCode').value;
+      const apiKey = '426951d21ec4e1baef5bf01a52428423';
+      const url = `https://api.openweathermap.org/data/2.5/weather?zip=${zipCode},us&appid=${apiKey}&units=metric`;
+
+      fetch(url)
+        .then(response => {
+          if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+          }
+          return response.json();
+        })
+        .then(data => {
+          const temperature = data.main.temp;
+          suggestOutfit(temperature);
+        })
+        .catch(error => {
+          console.error('Error fetching weather data:', error);
+          document.getElementById('result').innerHTML = `<p>Failed to retrieve weather data. Please check your input.</p>`;
+        });
+    }
+
+  function suggestOutfit(temperature) {
             const occasion = document.getElementById('occasion').value;
-            const season = document.getElementById('season').value;
             const skinTone = document.getElementById('skinTone').value;
             let outfit = '';
             let imagePaths = [];
 
-            if (skinTone === "light" && season === "winter" && occasion === "formal" && temperature <= 0) {
-                <!-- outfit = 'Wear a warm coat, scarf, and gloves.'; -->
+            if (skinTone === "light" && occasion === "formal" && temperature <= 0) {
                 imagePaths = [
-                    './assets/winter_formal_outfits/winter_outfit_1.png',
-                    './assets/winter_formal_outfits/winter_outfit_2.png',
-                    './assets/winter_formal_outfits/winter_outfit_3.png',
-                    './assets/winter_formal_outfits/winter_outfit_4.png',
-                    './assets/winter_formal_outfits/winter_outfit_5.png'
+                    // './assets/formal/fair/temp_less_than_eql_0/outfit_1.png',
+                    './assets/formal/fair/temp_less_than_eql_0/outfit_2.png',
+                    './assets/formal/fair/temp_less_than_eql_0/outfit_3.png'
+                    // './assets/formal/fair/temp_less_than_eql_0/outfit_4.png',
+                    // './assets/formal/fair/temp_less_than_eql_0/outfit_5.png'
                 ];
-            } else if (skinTone === "light" && season === "winter" && occasion === "formal" && temperature > 0 && temperature <= 10) {
-                <!-- outfit = 'A light jacket and long pants would be suitable.'; -->
+            } else if (skinTone === "light" && occasion === "formal" && temperature > 0 && temperature <= 15) {
                  imagePaths = [
-                    './assets/winter_formal_outfits/winter_outfit_6.png',
-                    './assets/winter_formal_outfits/winter_outfit_7.png',
-                    './assets/winter_formal_outfits/winter_outfit_8.png',
-                    './assets/winter_formal_outfits/winter_outfit_9.png',
-                    './assets/winter_formal_outfits/winter_outfit_10.png'
+                    './assets/formal/fair/temp_less_than_eql_15/outfit_1.png',
+                    './assets/formal/fair/temp_less_than_eql_15/outfit_2.png',
+                    './assets/formal/fair/temp_less_than_eql_15/outfit_3.png',
+                    './assets/formal/fair/temp_less_than_eql_15/outfit_4.png',
+                    './assets/formal/fair/temp_less_than_eql_15/outfit_5.png'
                 ];
-            } else {
-                outfit = 'Wear shorts and a t-shirt.';
+            } else if (skinTone === "light" && occasion === "formal" && temperature > 15) {
                 imagePaths = [
-                    './assets/summer-casual1.jpg',
-                    './assets/summer-casual2.jpg',
-                    './assets/summer-casual3.jpg',
-                    './assets/summer-casual4.jpg',
-                    './assets/summer-casual5.jpg'
+                    './assets/formal/fair/temp_grt_than_15/outfit_1.png',
+                    './assets/formal/fair/temp_grt_than_15/outfit_2.png',
+                    './assets/formal/fair/temp_grt_than_15/outfit_3.png',
+                    './assets/formal/fair/temp_grt_than_15/outfit_4.png',
+                    './assets/formal/fair/temp_grt_than_15/outfit_5.png'
+                ];
+            } else if (skinTone === "medium" && occasion === "formal" && temperature <= 0) {
+                 imagePaths = [
+                    // './assets/formal/medium/temp_less_than_eql_0/outfit_1.jpg',
+                    './assets/formal/medium/temp_less_than_eql_0/outfit_2.png',
+                    // './assets/formal/medium/temp_less_than_eql_0/outfit_3.png',
+                    './assets/formal/medium/temp_less_than_eql_0/outfit_4.jpg'
+                    // './assets/formal/medium/temp_less_than_eql_0/outfit_5.jpg'
+                ];
+            } else if (skinTone === "medium" && occasion === "formal" && temperature > 0 && temperature <= 15) {
+                 imagePaths = [
+                    './assets/formal/medium/temp_less_than_eql_10/outfit_1.jpg',
+                    './assets/formal/medium/temp_less_than_eql_10/outfit_2.png',
+                    './assets/formal/medium/temp_less_than_eql_10/outfit_3.png',
+                    './assets/formal/medium/temp_less_than_eql_10/outfit_4.png',
+                    './assets/formal/medium/temp_less_than_eql_10/outfit_5.png'
+                ];
+            } else if (skinTone === "medium" && occasion === "formal" && temperature > 15) {
+                imagePaths = [
+                    './assets/formal/medium/temp_grt_than_15/outfit_1.png',
+                    './assets/formal/medium/temp_grt_than_15/outfit_2.png',
+                    './assets/formal/medium/temp_grt_than_15/outfit_3.png',
+                    './assets/formal/medium/temp_grt_than_15/outfit_4.png',
+                    './assets/formal/medium/temp_grt_than_15/outfit_5.png'
+                ];
+            } else if (skinTone === "dark" && occasion === "formal" && temperature <= 0) {
+                 imagePaths = [
+                    './assets/formal/dark/temp_less_than_eql_0/outfit_1.png',
+                    // './assets/formal/dark/temp_less_than_eql_0/outfit_2.png',
+                    './assets/formal/dark/temp_less_than_eql_0/outfit_3.png',
+                    // './assets/formal/dark/temp_less_than_eql_0/outfit_4.png',
+                    // './assets/formal/dark/temp_less_than_eql_0/outfit_5.png'
+                ];
+            } else if (skinTone === "dark" && occasion === "formal" && temperature > 0 && temperature <= 15) {
+                 imagePaths = [
+                    './assets/formal/dark/temp_less_than_eql_10/outfit_1.png',
+                    './assets/formal/dark/temp_less_than_eql_10/outfit_2.png',
+                    './assets/formal/dark/temp_less_than_eql_10/outfit_3.png',
+                    './assets/formal/dark/temp_less_than_eql_10/outfit_4.png',
+                    './assets/formal/dark/temp_less_than_eql_10/outfit_5.png'
+                ];
+            } else if (skinTone === "dark" && occasion === "formal" && temperature > 15) {
+                imagePaths = [
+                    './assets/formal/dark/temp_grt_than_15/outfit_1.png',
+                    './assets/formal/dark/temp_grt_than_15/outfit_2.png',
+                    './assets/formal/dark/temp_grt_than_15/outfit_3.png',
+                    './assets/formal/dark/temp_grt_than_15/outfit_4.png',
+                    './assets/formal/dark/temp_grt_than_15/outfit_5.png'
+                ];
+            } else if (skinTone === "light" && occasion === "casual" && temperature <= 0) {
+                imagePaths = [
+                    // './assets/casual/fair/temp_less_than_eql_0/outfit_1.png',
+                    // './assets/casual/fair/temp_less_than_eql_0/outfit_2.png',
+                    './assets/casual/fair/temp_less_than_eql_0/outfit_3.png',
+                    './assets/casual/fair/temp_less_than_eql_0/outfit_4.png'
+                    // './assets/casual/fair/temp_less_than_eql_0/outfit_5.png'
+                ];
+            } else if (skinTone === "light" && occasion === "casual" && temperature > 0 && temperature <= 15) {
+                 imagePaths = [
+                    './assets/casual/fair/temp_less_than_eql_15/outfit_1.png',
+                    './assets/casual/fair/temp_less_than_eql_15/outfit_2.png',
+                    './assets/casual/fair/temp_less_than_eql_15/outfit_3.png',
+                    './assets/casual/fair/temp_less_than_eql_15/outfit_4.png',
+                    './assets/casual/fair/temp_less_than_eql_15/outfit_5.png'
+                ];
+            } else if (skinTone === "light" && occasion === "casual" && temperature > 15) {
+                imagePaths = [
+                    './assets/casual/fair/temp_grt_than_15/outfit_1.png',
+                    './assets/casual/fair/temp_grt_than_15/outfit_2.png',
+                    './assets/casual/fair/temp_grt_than_15/outfit_3.png',
+                    './assets/casual/fair/temp_grt_than_15/outfit_4.png',
+                    './assets/casual/fair/temp_grt_than_15/outfit_5.png'
+                ];
+            } else if (skinTone === "medium" && occasion === "casual" && temperature <= 0) {
+                 imagePaths = [
+                    './assets/casual/medium/temp_less_than_eql_0/outfit_1.png',
+                    // './assets/casual/medium/temp_less_than_eql_0/outfit_2.png',
+                    './assets/casual/medium/temp_less_than_eql_0/outfit_3.png'
+                    // './assets/casual/medium/temp_less_than_eql_0/outfit_4.png',
+                    // './assets/casual/medium/temp_less_than_eql_0/outfit_5.png'
+                ];
+            } else if (skinTone === "medium" && occasion === "casual" && temperature > 0 && temperature <= 15) {
+                 imagePaths = [
+                    './assets/casual/medium/temp_less_than_eql_10/outfit_1.png',
+                    './assets/casual/medium/temp_less_than_eql_10/outfit_2.png',
+                    './assets/casual/medium/temp_less_than_eql_10/outfit_3.png',
+                    './assets/casual/medium/temp_less_than_eql_10/outfit_4.jpg',
+                    './assets/casual/medium/temp_less_than_eql_10/outfit_5.png'
+                ];
+            } else if (skinTone === "medium" && occasion === "casual" && temperature > 15) {
+                imagePaths = [
+                    './assets/casual/medium/temp_grt_than_15/outfit_1.png',
+                    './assets/casual/medium/temp_grt_than_15/outfit_2.jpg',
+                    './assets/casual/medium/temp_grt_than_15/outfit_3.png',
+                    './assets/casual/medium/temp_grt_than_15/outfit_4.png',
+                    './assets/casual/medium/temp_grt_than_15/outfit_5.png'
+                ];
+            } else if (skinTone === "dark" && occasion === "casual" && temperature <= 0) {
+                 imagePaths = [
+                    // './assets/casual/dark/temp_less_than_eql_0/outfit_1.png',
+                    './assets/casual/dark/temp_less_than_eql_0/outfit_2.png',
+                    // './assets/casual/dark/temp_less_than_eql_0/outfit_3.png',
+                    './assets/casual/dark/temp_less_than_eql_0/outfit_4.png',
+                    // './assets/casual/dark/temp_less_than_eql_0/outfit_5.png'
+                ];
+            } else if (skinTone === "dark" && occasion === "casual" && temperature > 0 && temperature <= 15) {
+                 imagePaths = [
+                    './assets/casual/dark/temp_less_than_eql_10/outfit_1.png',
+                    './assets/casual/dark/temp_less_than_eql_10/outfit_2.png',
+                    './assets/casual/dark/temp_less_than_eql_10/outfit_3.png',
+                    './assets/casual/dark/temp_less_than_eql_10/outfit_4.png',
+                    './assets/casual/dark/temp_less_than_eql_10/outfit_5.png'
+                ];
+            } else if (skinTone === "dark" && occasion === "casual" && temperature > 15) {
+                imagePaths = [
+                    './assets/casual/dark/temp_grt_than_15/outfit_1.png',
+                    './assets/casual/dark/temp_grt_than_15/outfit_2.png',
+                    './assets/casual/dark/temp_grt_than_15/outfit_3.png',
+                    './assets/casual/dark/temp_grt_than_15/outfit_4.png',
+                    './assets/casual/dark/temp_grt_than_15/outfit_5.png'
                 ];
             }
 
-            // Generate HTML for the images
             const imagesHTML = imagePaths
-                .map(path => `<img src="${path}" alt="Outfit suggestion" style="max-width: 100px; height: auto; margin: 5px;">`)
+                .map(path => `
+                    <div class="image-card">
+                        <img src="${path}" alt="Outfit suggestion">
+                    </div>
+                `)
                 .join('');
 
-            document.getElementById('result').innerHTML = `
-                <p>Based on the temperature of ${temperature}°C and your selections, ${outfit}</p>
-                <div style="display: flex; flex-wrap: wrap;">${imagesHTML}</div>
+            document.getElementById('resultContainer').innerHTML = `
+                <p class="header-one component">Outfit suggestions for a temperature of ${temperature}°C based on your preferences:</p>
+                <div class="image-container">${imagesHTML}</div>
             `;
         }
-    </script>
+
+  </script>
 </body>
 </html>
